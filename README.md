@@ -12,8 +12,9 @@ the [Advanced Solution found in this repository](https://gitlab.mff.cuni.cz/svit
 However, the calculation approach was slightly different.
 The equations are represented as abstract Terms allowing for a symbolic manipulation and greater abstraction of the
 mathematical operations.
-This comes with some performance penalties, due to recursive evaluation.
+This comes with some performance penalties due to recursive evaluation;
 See [Possible Enhancements](#possible-enhancements).
+However, for most calculations the performance is surprisingly good even with the naive implementation.
 
 The code was written with the 'Functional Core & Imperative Shell' approach in mind; therefore, most data structures are
 treated as immutable.
@@ -39,3 +40,4 @@ derived [in the above-mentioned repository](https://gitlab.mff.cuni.cz/svitakda/
   using `f = eval("lambda x: (x + 2)")`)
 - Write a parser from a given source format to `Term`. (Manual Term construction is tedious.)
 - Create a more general Branching/Switching logic for `Term`s, possibly using some generic `Condition` class.
+- Create a `PhaseDiagram` class to handle the overall calculation flow in a more structured manner.
