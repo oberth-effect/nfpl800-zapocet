@@ -38,24 +38,24 @@ N = sum(np.array(p.X.eval(ctx)).size for p in phases)
 points = np.empty((N, 2))
 phase_id = np.empty(N, dtype=int)
 
-# for T in Trange:
-#     print(".", end="", flush=True)
-#
-#     o = 0
-#     for i, phase in enumerate(phases):
-#         c = np.array(phase.X.eval(ctx))
-#         points[o:o + c.size, 0] = c
-#         points[o:o + c.size, 1] = phase.G.eval(ctx | {"T": T0 + T})
-#         phase_id[o:o + c.size] = i
-#         o += c.size
-#
-#     hull = ConvexHull(points)
-#     mask = hull.equations[:, 1] < 0
-#     for a, b in hull.simplices[mask]:
-#         if phase_id[a] != phase_id[b] or abs(points[a, 0] - points[b, 0]) > 0.05:
-#             plt.plot(at2wt([points[a, 0], points[b, 0]]), [T, T], "C0.-", lw=0.5)
-# print()
-# plt.xlim(0, 1)
+for T in Trange:
+    print(".", end="", flush=True)
+
+    o = 0
+    for i, phase in enumerate(phases):
+        c = np.array(phase.X.eval(ctx))
+        points[o:o + c.size, 0] = c
+        points[o:o + c.size, 1] = phase.G.eval(ctx | {"T": T0 + T})
+        phase_id[o:o + c.size] = i
+        o += c.size
+
+    hull = ConvexHull(points)
+    mask = hull.equations[:, 1] < 0
+    for a, b in hull.simplices[mask]:
+        if phase_id[a] != phase_id[b] or abs(points[a, 0] - points[b, 0]) > 0.05:
+            plt.plot(at2wt([points[a, 0], points[b, 0]]), [T, T], "C0.-", lw=0.5)
+print()
+plt.xlim(0, 1)
 
 
 def solve_eq2_cu2mg(p: Phase, t0: float, x0: float):
@@ -130,5 +130,5 @@ for l in eqlines:
     plt.plot(at2wt(l.x1), l.t - T0, "C2-")
     plt.plot(at2wt(l.x2), l.t - T0, "C2-")
 
-plt.savefig("CuMg_diagram-noCH.png")
+plt.savefig("CuMg_diagram-withCH.png")
 plt.show()
