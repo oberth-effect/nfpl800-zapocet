@@ -47,7 +47,7 @@ class Phase:
             dty = self.G.derivative("T").derivative(pars[1])
 
             t1 = Sum(Mult(da, self.X.derivative(pars[0])), neg(dtx))
-            t2 = Sum(Mult(da, self.X.derivative(pars[0])), neg(dty))
+            t2 = Sum(Mult(da, self.X.derivative(pars[1])), neg(dty))
             return [(dxx, dxy), (dxy, dyy)], (t1, t2)
 
     def a0(self) -> Term:
