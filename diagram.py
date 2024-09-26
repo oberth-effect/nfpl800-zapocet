@@ -60,15 +60,17 @@ plt.xlim(0, 1)
 
 def solve_eq2_cu2mg(p: Phase, t0: float, x0: float):
     def fun(z):
-        t, y1, y2, x = z
+        t, y1, y2, x, l = z
+        ctx = {"T": t, "Y1": y1, "Y2": y2}
         return (
-            p.G.eval({"T": t, "X": x}) - cu2mg.G.eval({"T": t, "Y1": y1, "Y2": y2}),
-            cu2mg.G.derivative("Y1").eval({"T": t, "Y1": y1, "Y2": y2}),
-            cu2mg.G.derivative("Y2").eval({"T": t, "Y1": y1, "Y2": y2}),
-            cu2mg.X.eval({"Y1": y1, "Y2": y2}) - x
+            p.G.eval({"T": t, "X": x}) - cu2mg.G.eval(ctx),
+            p.G.derivative("X").eval({"T": t, "X": x}) - l,
+            cu2mg.G.derivative("Y1").eval(ctx) - l*cu2mg.X.derivative("Y1").eval(ctx),
+            cu2mg.G.derivative("Y2").eval(ctx) - l*cu2mg.X.derivative("Y2").eval(ctx),
+            cu2mg.X.eval(ctx) - x
         )
 
-    sol = root(fun, (float(t0), 0.05, 0.9, x0), options=dict(factor=1e-4))
+    sol = root(fun, (float(t0), 0.05, 0.9, x0, -20000), options=dict(factor=1e-4))
     print(sol.message)
     print(sol.x)
     return sol.x[0]
