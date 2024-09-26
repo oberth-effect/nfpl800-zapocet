@@ -1,4 +1,4 @@
-# NFPL800: Termodinamika kondenzovaných soustav
+# NFPL800: Termodynamika kondenzovaných soustav
 
 This repository contains a solution for a phase diagram of Cu-Mg mixture done as a part of coursework on thermodynamics.
 
