@@ -69,6 +69,10 @@ class Phase:
         if a0:
             return Sum(self.G, neg(Mult(a0, self.X)))
 
+@dataclass(frozen=True)
+class Eq2Point:
+    x: float
+    T: float
 
 def calculate_eq2(p1: Phase, p2: Phase, t0: float, x: float) -> float:
     """
@@ -90,7 +94,7 @@ def calculate_eq2(p1: Phase, p2: Phase, t0: float, x: float) -> float:
     sol = root(fun, float(t0))
     print(sol.message)
     print(sol.x)
-    return sol.x[0]
+    return Eq2Point(x, sol.x[0])
 
 
 @dataclass(frozen=True)

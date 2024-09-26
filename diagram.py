@@ -5,7 +5,7 @@ from scipy.optimize import root
 from scipy.spatial import ConvexHull
 
 from data import G_hcp, G_fcc, G_liq, G_CuMg2, G_Cu2Mg, X, X_CuMg2, X_Cu2Mg
-from phase import Phase, calculate_eq3, calculate_eq2, calculate_eqline
+from phase import Phase, calculate_eq3, calculate_eq2, calculate_eqline, Eq2Point
 
 x = np.linspace(0, 1, 500)
 y1, y2 = np.random.uniform(0, 1, size=(2, 100000))
@@ -73,7 +73,7 @@ def solve_eq2_cu2mg(p: Phase, t0: float, x0: float):
     sol = root(fun, (float(t0), 0.05, 0.9, x0, -20000), options=dict(factor=1e-4))
     print(sol.message)
     print(sol.x)
-    return sol.x[0]
+    return Eq2Point(sol.x[3], sol.x[0])
 
 
 eq2 = [
@@ -109,21 +109,21 @@ eq3 = [
 ]
 
 eqlines = [
-    calculate_eqline(liq, fcc, (eq3[0].T, eq2[0]), eq=eq3[0]),
+    calculate_eqline(liq, fcc, (eq3[0].T, eq2[0].T), eq=eq3[0]),
     calculate_eqline(cu2mg, fcc, (eq3[0].T, T0 + 200), eq=eq3[0]),
-    calculate_eqline(liq, cu2mg, (eq3[0].T, 1080), eq=eq3[0]),
+    calculate_eqline(liq, cu2mg, (eq3[0].T, eq2[1].T), eq=eq3[0]),
 
-    calculate_eqline(liq, cu2mg, (eq3[1].T, 1080), eq=eq3[1]),
+    calculate_eqline(liq, cu2mg, (eq3[1].T, eq2[1].T), eq=eq3[1]),
     calculate_eqline(cu2mg, cumg2, (eq3[1].T, 200 + T0), eq=eq3[1]),
-    calculate_eqline(liq, cumg2, (eq3[1].T, eq2[2]), eq=eq3[1]),
+    calculate_eqline(liq, cumg2, (eq3[1].T, eq2[2].T), eq=eq3[1]),
 
-    calculate_eqline(liq, cumg2, (eq3[2].T, eq2[2]), eq=eq3[2]),
+    calculate_eqline(liq, cumg2, (eq3[2].T, eq2[2].T), eq=eq3[2]),
     calculate_eqline(hcp, cumg2, (eq3[2].T, 200 + T0), eq=eq3[2]),
-    calculate_eqline(liq, hcp, (eq3[2].T, eq2[3]), eq=eq3[2])
+    calculate_eqline(liq, hcp, (eq3[2].T, eq2[3].T), eq=eq3[2])
 ]
 
-for x, t in zip((0, 1 / 3, 2 / 3, 1), eq2):
-    plt.plot(at2wt(x), t - T0, "C3o")
+for p in eq2:
+    plt.plot(at2wt(p.x), p.T - T0, "C3o")
 
 for p in eq3:
     plt.plot([at2wt(i[0]) for i in p.phases.values()], [p.T - T0, p.T - T0, p.T - T0], "C1o-")
