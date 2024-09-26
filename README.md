@@ -32,7 +32,7 @@ derived [in the above-mentioned repository](https://gitlab.mff.cuni.cz/svitakda/
 
 ## Possible Enhancements
 
-- Implement a Term substitution, at least for `Param`s (ie. `Param("X")` => `Param("Xfcc")`).
+- Implement a Term substitution, at least for `Param`s (i.e. `Param("X")` => `Param("Xfcc")`).
   This would drastically reduce the amount of `.eval` calls in the `calculate_eqline` function.
 - Implement a transformation of `Term` to a Python function to remove the recursive evaluation and speed-up
   calculations.
